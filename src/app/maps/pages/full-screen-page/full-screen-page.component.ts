@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, viewChild } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { environment } from '../../../../environments/environments';
 
@@ -9,10 +9,16 @@ import { environment } from '../../../../environments/environments';
 })
 export class FullScreenPageComponent implements AfterViewInit {
 
+
+
+  @ViewChild('map') divMap?:ElementRef;
+
   ngAfterViewInit(): void {
     // Inicializar el mapa pasando el token directamente en el constructor
+    if (!this.divMap)  throw 'El elemento no fue encontrado';
+
     const map = new mapboxgl.Map({
-      container: 'map', // ID del contenedor
+      container: this.divMap.nativeElement, // ID del contenedor
       style: 'mapbox://styles/mapbox/streets-v12', // URL de estilo
       center: [-74.5, 40], // Posición inicial [lng, lat]
       zoom: 9, // Zoom inicial
