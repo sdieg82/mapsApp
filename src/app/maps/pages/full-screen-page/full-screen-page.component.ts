@@ -1,5 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
-import * as mapboxgl from 'mapbox-gl'; // or "const mapboxgl = require('mapbox-gl');"
+import * as mapboxgl from 'mapbox-gl';
+import { environment } from '../../../../environments/environments';
 
 @Component({
   selector: 'app-full-screen-page',
@@ -8,17 +9,15 @@ import * as mapboxgl from 'mapbox-gl'; // or "const mapboxgl = require('mapbox-g
 })
 export class FullScreenPageComponent implements AfterViewInit {
 
-  constructor() {
-    // Asignar el token en el constructor
-    (mapboxgl as any).accessToken = 'pk.eyJ1Ijoic2RpZWc4MiIsImEiOiJjbTE4MXozZnUwenlhMnFwczI1ZGhjZHljIn0.HPMbk532neYWTj-1VQAy4Q';
-  }
-
   ngAfterViewInit(): void {
+    // Inicializar el mapa pasando el token directamente en el constructor
     const map = new mapboxgl.Map({
-      container: 'map', // container ID
-      style: 'mapbox://styles/mapbox/streets-v12', // style URL
-      center: [-74.5, 40], // starting position [lng, lat]
-      zoom: 9, // starting zoom
+      container: 'map', // ID del contenedor
+      style: 'mapbox://styles/mapbox/streets-v12', // URL de estilo
+      center: [-74.5, 40], // Posición inicial [lng, lat]
+      zoom: 9, // Zoom inicial
+      accessToken: environment.mapbox_key // Asignar el token aquí
     });
   }
 }
+
