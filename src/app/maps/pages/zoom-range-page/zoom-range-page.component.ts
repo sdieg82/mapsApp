@@ -11,16 +11,45 @@ export class ZoomRangePageComponent implements AfterViewInit{
   
   @ViewChild('map') divMap?:ElementRef;
 
+
+  public zoom:number=10;
+  public map?:mapboxgl.Map;
+
   ngAfterViewInit(): void {
     // Inicializar el mapa pasando el token directamente en el constructor
     if (!this.divMap)  throw 'El elemento no fue encontrado';
 
-    const map = new mapboxgl.Map({
+    this.map = new mapboxgl.Map({
       container: this.divMap.nativeElement, // ID del contenedor
       style: 'mapbox://styles/mapbox/streets-v12', // URL de estilo
       center: [-74.5, 40], // Posición inicial [lng, lat]
-      zoom: 9, // Zoom inicial
+      zoom: this.zoom, // Zoom inicial
       accessToken: environment.mapbox_key // Asignar el token aquí
     });
+    this.mapListeners();
+  }
+  mapListeners(){
+    if(!this.map) throw 'Mapa no inicializado'
+    this.map.on('zoom',(ev)=>{
+      this.zoom=this.map!.getZoom()
+    })
+
+    this.map.on('zoomend',(ev)=>{
+      if(this.map!.getZoom()<18) return;
+      this.map!.zoomTo(18)
+
+    })
+  }
+
+  zoomIn(){
+      this.map?.zoomIn()
+  }
+
+  zoomOut(){
+    this.map?.zoomOut()
+  }
+  zoomChanged(value:string){
+    this.zoom=Number(value)
+    this.map?.zoomTo(this.zoom)
   }
 }
