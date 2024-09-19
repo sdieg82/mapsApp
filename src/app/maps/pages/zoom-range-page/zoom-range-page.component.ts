@@ -19,6 +19,7 @@ export class ZoomRangePageComponent implements AfterViewInit, OnDestroy{
 
   ngAfterViewInit(): void {
     // Inicializar el mapa pasando el token directamente en el constructor
+    if (typeof window !== 'undefined' && this.divMap) {
     if (!this.divMap)  throw 'El elemento no fue encontrado';
 
     this.map = new mapboxgl.Map({
@@ -29,7 +30,7 @@ export class ZoomRangePageComponent implements AfterViewInit, OnDestroy{
       accessToken: environment.mapbox_key // Asignar el token aquí
     });
     this.mapListeners();
-  }
+  }}
 
   ngOnDestroy(): void {
     this.map?.on('move',()=>{
