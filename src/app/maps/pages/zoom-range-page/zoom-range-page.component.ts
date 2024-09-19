@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { environment } from '../../../../environments/environments';
 
@@ -7,13 +7,15 @@ import { environment } from '../../../../environments/environments';
   templateUrl: './zoom-range-page.component.html',
   styleUrl: './zoom-range-page.component.css'
 })
-export class ZoomRangePageComponent implements AfterViewInit{
+export class ZoomRangePageComponent implements AfterViewInit, OnDestroy{
+  
   
   @ViewChild('map') divMap?:ElementRef;
 
 
   public zoom:number=10;
   public map?:mapboxgl.Map;
+  public lngLat:mapboxgl.LngLatLike=new mapboxgl.LngLat(-78.5946468892165, -1.2564397873686346)
 
   ngAfterViewInit(): void {
     // Inicializar el mapa pasando el token directamente en el constructor
@@ -22,11 +24,17 @@ export class ZoomRangePageComponent implements AfterViewInit{
     this.map = new mapboxgl.Map({
       container: this.divMap.nativeElement, // ID del contenedor
       style: 'mapbox://styles/mapbox/streets-v12', // URL de estilo
-      center: [-74.5, 40], // Posición inicial [lng, lat]
+      center: this.lngLat, // Posición inicial [lng, lat]
       zoom: this.zoom, // Zoom inicial
       accessToken: environment.mapbox_key // Asignar el token aquí
     });
     this.mapListeners();
+  }
+
+  ngOnDestroy(): void {
+    this.map?.on('move',()=>{
+     this.map?.remove()
+    })
   }
   mapListeners(){
     if(!this.map) throw 'Mapa no inicializado'
@@ -38,6 +46,9 @@ export class ZoomRangePageComponent implements AfterViewInit{
       if(this.map!.getZoom()<18) return;
       this.map!.zoomTo(18)
 
+    })
+    this.map.on('move',()=>{
+      this.lngLat=this.map!.getCenter();
     })
   }
 
