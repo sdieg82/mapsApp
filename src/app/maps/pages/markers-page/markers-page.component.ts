@@ -1,6 +1,13 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { LngLat, Marker } from 'mapbox-gl';
 import { environment } from '../../../../environments/environments';
+
+interface MarkerColor{
+  color:string;
+  marker:mapboxgl.Marker;
+}
+
+
 
 @Component({
   selector: 'app-markers-page',
@@ -14,7 +21,8 @@ export class MarkersPageComponent {
   @ViewChild('map') divMap?:ElementRef;
 
 
-  public zoom:number=10;
+  public markers:MarkerColor[]=[];
+  public zoom:number=13;
   public map?:mapboxgl.Map;
   public lngLat:mapboxgl.LngLatLike=new mapboxgl.LngLat(-78.5946468892165, -1.2564397873686346)
 
@@ -31,12 +39,46 @@ export class MarkersPageComponent {
       accessToken: environment.mapbox_key // Asignar el token aquí
     });
 
-    const marker=new mapboxgl.Marker({
-      color:'white'
-    })
-    .setLngLat(this.lngLat)
-    .addTo(this.map)
+    // const marker=new mapboxgl.Marker({
+      
+    // })
+    // .setLngLat(this.lngLat)
+    // .addTo(this.map)
    
   }}
 
+  createMarker(){
+    if(!this.map) return;
+    const color = '#xxxxxx'.replace(/x/g, y=>(Math.random()*16|0).toString(16));
+    const lgnLat=this.map?.getCenter();
+    this.addMarker(lgnLat,color);
+  }
+
+  addMarker(lngLat:LngLat,color:string){
+    if(!this.map)return;
+    const marker= new mapboxgl.Marker({
+      color:color,
+      draggable:true
+    })
+    .setLngLat(lngLat)
+    .addTo(this.map);
+    this.markers.push({
+      color:color,
+      marker:marker
+
+    })
+  }
+
+  deleteMarker(position:number){
+    this.markers[position].marker.remove()
+    this.markers.splice(position,1)
+  }
+
+  flyTo(marker:Marker){
+    this.map?.flyTo({
+        zoom:14,
+        center:marker.getLngLat()
+    })
+
+  }
 }

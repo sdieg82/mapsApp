@@ -2,4 +2,16 @@ div{
     width: 100vw;
     height: 100vh;
     background-color: rgb(0, 255, 85);
-}     
+}   
+button{
+    position: fixed;
+    bottom:  30px;
+    right: 20px;
+    
+}  
+ul{
+    position: fixed;
+    top: 30px;
+    right: 20px;
+    cursor: pointer;
+}

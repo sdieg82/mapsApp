@@ -2,6 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@ang
 import * as mapboxgl from 'mapbox-gl';
 import { environment } from '../../../../environments/environments';
 
+
+
 @Component({
   selector: 'app-zoom-range-page',
   templateUrl: './zoom-range-page.component.html',
@@ -13,9 +15,9 @@ export class ZoomRangePageComponent implements AfterViewInit, OnDestroy{
   @ViewChild('map') divMap?:ElementRef;
 
 
-  public zoom:number=10;
+  public zoom:number=15;
   public map?:mapboxgl.Map;
-  public lngLat:mapboxgl.LngLatLike=new mapboxgl.LngLat(-78.5946468892165, -1.2564397873686346)
+  public lngLat:mapboxgl.LngLatLike=new mapboxgl.LngLat(-78.62469554733025, -1.247752919436948)
 
   ngAfterViewInit(): void {
     // Inicializar el mapa pasando el token directamente en el constructor
