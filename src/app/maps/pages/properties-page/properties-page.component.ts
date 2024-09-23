@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AlonePageComponent } from '../../../alone/pages/alone-page/alone-page.component';
 
 
 interface House {

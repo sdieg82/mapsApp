@@ -1,21 +1,41 @@
-#map{
+#map {
     width: 100vw;
     height: 100vh;
     background-color: red;
 }
-.floating-range{
+
+.floating-range {
     position: fixed;
-    bottom: 50px;
-    left: 50px;
+    bottom: 20px; /* Reducido para pantallas pequeñas */
+    left: 20px; /* Reducido para pantallas pequeñas */
     z-index: 999;
-    width: 500px;
+    width: 90%; /* Ocupa el 90% del ancho de la pantalla */
+    max-width: 500px; /* Limita el ancho máximo a 500px */
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0px 5px 10px rgb(0, 0, 0,0.1) ;
-
+    box-shadow: 0px 5px 10px rgb(0, 0, 0, 0.1);
+    padding: 15px; /* Añadir padding interno */
+    box-sizing: border-box; /* Asegura que el padding no exceda el tamaño total */
 }
 
-.floating-content{
+/* Ajuste específico para pantallas más grandes */
+@media (min-width: 768px) {
+    .floating-range {
+        width: 500px; /* Ancho fijo para pantallas medianas en adelante */
+        bottom: 50px; /* Posición original */
+        left: 50px; /* Posición original */
+    }
+}
+
+.floating-content {
     display: flex;
+    flex-direction: column; /* Apilar elementos verticalmente en pantallas pequeñas */
     align-items: center;
+}
+
+/* Ajuste específico para pantallas medianas en adelante */
+@media (min-width: 576px) {
+    .floating-content {
+        flex-direction: row; /* Cambia a fila en pantallas más grandes */
+    }
 }
