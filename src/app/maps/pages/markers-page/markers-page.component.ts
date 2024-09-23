@@ -7,6 +7,10 @@ interface MarkerColor{
   marker:mapboxgl.Marker;
 }
 
+interface PlainMarker{
+  color:string;
+  lngLati:number[]
+}
 
 
 @Component({
@@ -39,6 +43,9 @@ export class MarkersPageComponent {
       accessToken: environment.mapbox_key // Asignar el token aquí
     });
 
+    //read localStorage
+    this.readFromLocalStorage();
+
     // const marker=new mapboxgl.Marker({
       
     // })
@@ -67,6 +74,7 @@ export class MarkersPageComponent {
       marker:marker
 
     })
+    this.savToLocalStorage()
   }
 
   deleteMarker(position:number){
@@ -80,5 +88,25 @@ export class MarkersPageComponent {
         center:marker.getLngLat()
     })
 
+  }
+
+  savToLocalStorage(){
+    const plainMarkers:PlainMarker[]=this.markers.map(({color,marker})=>{
+      return {
+        color,
+        lngLati:marker.getLngLat().toArray()
+      }
+    });
+    localStorage.setItem('plainMarkers',JSON.stringify(plainMarkers));
+  }
+
+  readFromLocalStorage(){
+    const plainMarkersString=localStorage.getItem('plainMarkers') ?? '[]'
+    const plainMarkers:PlainMarker[]=JSON.parse(plainMarkersString)
+    plainMarkers.forEach(({color,lngLati})=>{
+      const[lng,lat]=lngLati
+      const coords=new LngLat(lng,lat)
+      this.addMarker(coords,color)
+    })
   }
 }
