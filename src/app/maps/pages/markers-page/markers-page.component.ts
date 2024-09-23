@@ -75,6 +75,9 @@ export class MarkersPageComponent {
 
     })
     this.savToLocalStorage()
+    marker.on('dragend',()=>{
+      this.savToLocalStorage()
+    })
   }
 
   deleteMarker(position:number){
